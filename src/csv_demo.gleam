@@ -3,6 +3,7 @@ import gleam/string
 import gleam/list
 import gleam/map
 import gleam/result
+import gleam/option.{None, Some}
 
 const test_csv_input = "firstname;lastname;address;city;state;zip
 John;Doe;120 jefferson st.;Riverside;NJ;08075
@@ -31,6 +32,14 @@ fn parse_row(headers: List(String), row: String, delimiter: String) -> CSVRow {
   |> CSVRow
 }
 
+pub fn get_row(csv: CSVDocument, index: Int) {
+  list.at(csv.rows, index)
+}
+
+// pub fn get_value(row: CSVRow, name: String) -> String {
+//   // row.val
+//   // |> map.get(name)
+// }
 pub fn parse(input: String, delimiter: String) -> CSVDocument {
   let raw_rows =
     input
@@ -48,6 +57,8 @@ pub fn parse(input: String, delimiter: String) -> CSVDocument {
 }
 
 pub fn main(_) {
-  parse(test_csv_input, ";")
-  |> io.debug
+  let csv = parse(test_csv_input, ";")
+  let first_row = result.unwrap(get_row(csv, 1), Nil)
+  io.debug(first_row)
+  // io.debug(get_value(first_row, "hello"))
 }
